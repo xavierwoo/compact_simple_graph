@@ -4,3 +4,5 @@ project(compact_simple_graph)
 set(CMAKE_CXX_STANDARD 20)
 
 add_library(compact_simple_graph STATIC library.cpp)
+
+target_include_directories(compact_simple_graph PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
