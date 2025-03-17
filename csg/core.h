@@ -33,6 +33,7 @@ namespace csg{
         auto get_edge_lists() const -> const vector<vector<U>>& {return edge_lists;}
         [[maybe_unused]]
         auto get_vertices_name_id_map() const -> const unordered_map<K,U>& {return vertices_name_id_map;}
+        auto get_vertex_num() const -> U {return (U)edge_lists.size();}
     };
 
     template<typename K, typename U>

@@ -98,6 +98,17 @@ namespace csg{
         cout<<"has_edge_id() works"<<endl;
     }
 
+    void test_get_vertex_num(){
+        Graph<string> graph;
+        graph.add_bdi_edge("A", "B");
+        graph.add_bdi_edge("A", "C");
+        graph.add_bdi_edge("A", "D");
+
+        assert(graph.get_vertex_num() == 4);
+
+        cout<<"get_vertex_num() works"<<endl;
+    }
+
     [[maybe_unused]]
     void it_works() {
         test_get_v_id();
@@ -106,6 +117,7 @@ namespace csg{
         test_get_neighbors_id();
         test_compile();
         test_has_edge_id();
+        test_get_vertex_num();
     }
 }
 
