@@ -18,17 +18,21 @@ namespace csg{
     using std::ranges::sort, std::ranges::find;
     template<typename K, typename U = uint32_t>
     struct Graph{
+    private:
         unordered_map<K, U> vertices_name_id_map;
         vector<vector<U>> edge_lists;
-
         bool compiled{false};
-
+    public:
         auto get_v_id(const K&) -> U;
         void add_di_edge(const K&, const K&);
         void add_bdi_edge(const K&, const K&);
         auto get_neighbors_id(U ) const -> const vector<U>&;
         auto has_edge_id(U , U ) const -> bool;
         void compile();
+        [[maybe_unused]]
+        auto get_edge_lists() const -> const vector<vector<U>>& {return edge_lists;}
+        [[maybe_unused]]
+        auto get_vertices_name_id_map() const -> const unordered_map<K,U>& {return vertices_name_id_map;}
     };
 
     template<typename K, typename U>

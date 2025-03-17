@@ -27,8 +27,8 @@ namespace csg{
 
         auto a_id {graph.get_v_id("A")};
         auto b_id {graph.get_v_id("B")};
-        assert(graph.edge_lists[a_id][0] == b_id);
-        assert(graph.edge_lists[b_id].empty());
+        assert(graph.get_edge_lists()[a_id][0] == b_id);
+        assert(graph.get_edge_lists()[b_id].empty());
 
         cout<<"add_di_edge() works"<<endl;
     }
@@ -39,8 +39,8 @@ namespace csg{
 
         auto a_id {graph.get_v_id("A")};
         auto b_id {graph.get_v_id("B")};
-        assert(graph.edge_lists[a_id][0] == b_id);
-        assert(graph.edge_lists[b_id][0] == a_id);
+        assert(graph.get_edge_lists()[a_id][0] == b_id);
+        assert(graph.get_edge_lists()[b_id][0] == a_id);
 
         cout<<"add_bdi_edge() works"<<endl;
     }
