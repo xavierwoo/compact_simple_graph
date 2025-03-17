@@ -19,8 +19,13 @@ namespace csg{
 
         auto get_v_id(const K&) -> U;
         void add_di_edge(const K&, const K&);
+        void add_bdi_edge(const K&, const K&);
     };
 
+    /***
+     * Get the id of a vertex.
+     * if it does not exist, then add it
+     */
     template<typename K, typename U>
     auto Graph<K, U>::get_v_id(const K &v) -> U {
         auto id_iter {vertices_name_id_map.find(v)};
@@ -34,6 +39,9 @@ namespace csg{
         return id;
     }
 
+    /***
+     * Add a direct edge
+     */
     template<typename K, typename U>
     void Graph<K, U>::add_di_edge(const K& source, const K& target) {
         auto s_id {get_v_id(source)};
@@ -42,8 +50,19 @@ namespace csg{
         edge_lists[s_id].push_back(t_id);
     }
 
+    /***
+     * Add a bi-direct edge
+     */
+    template<typename K, typename U>
+    void Graph<K, U>::add_bdi_edge(const K& source, const K& target) {
+        auto s_id {get_v_id(source)};
+        auto t_id {get_v_id(target)};
+
+        edge_lists[s_id].push_back(t_id);
+        edge_lists[t_id].push_back(s_id);
+    }
+
     [[maybe_unused]]void it_works();
-    void test_get_v_id();
 }
 
 #endif //COMPACT_SIMPLE_GRAPH_CORE_H
