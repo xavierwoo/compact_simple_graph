@@ -61,12 +61,30 @@ namespace csg{
         cout<<"get_neighbors_id() works"<<endl;
     }
 
+    void test_compile(){
+        Graph<string> graph;
+        graph.get_v_id("D");
+        graph.add_bdi_edge("A", "B");
+        graph.add_bdi_edge("A", "C");
+        graph.add_bdi_edge("A", "D");
+
+        graph.compile();
+
+        auto id {graph.get_v_id("A")};
+        assert(graph.get_neighbors_id(id).capacity() == 3);
+        auto d_id {graph.get_v_id("D")};
+        assert(graph.get_neighbors_id(id)[0] == d_id);
+
+        cout<<"compile works"<<endl;
+    }
+
     [[maybe_unused]]
     void it_works() {
         test_get_v_id();
         test_add_di_edge();
         test_add_bdi_edge();
         test_get_neighbors_id();
+        test_compile();
     }
 }
 

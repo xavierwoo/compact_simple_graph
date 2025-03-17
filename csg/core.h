@@ -9,24 +9,43 @@
 #include <vector>
 #include <cstdint>
 #include <cassert>
+#include <format>
+#include <algorithm>
+#include <ranges>
 
 namespace csg{
-    using std::vector, std::unordered_map;
+    using std::vector, std::unordered_map, std::format;
     template<typename K, typename U = uint32_t>
     struct Graph{
         unordered_map<K, U> vertices_name_id_map;
         vector<vector<U>> edge_lists;
 
+        bool compiled{false};
+
         auto get_v_id(const K&) -> U;
         void add_di_edge(const K&, const K&);
         void add_bdi_edge(const K&, const K&);
-
-        auto get_neighbors_id(U v_id) -> const vector<U>&;
+        auto get_neighbors_id(U v_id) const -> const vector<U>&;
+        void compile();
     };
 
     /***
+     * Make all edge lists memory fit and sorted
+     * Cannot change the graph after this is called
+     */
+    template<typename K, typename U>
+    void Graph<K, U>::compile() {
+        compiled = true;
+        for(auto& list : edge_lists){
+            list.shrink_to_fit();
+            std::ranges::sort(list);
+        }
+    }
+
+    /***
      * Get the id of a vertex.
-     * if it does not exist, then add it
+     * if it does not exist, then add it.
+     * Raise an error if the graph is compiled and the vertex does not exist
      */
     template<typename K, typename U>
     auto Graph<K, U>::get_v_id(const K &v) -> U {
@@ -35,6 +54,7 @@ namespace csg{
             return id_iter->second;
         }
 
+        assert(! compiled && std::format("Vertex {} does not exist", v).c_str());
         U id {(U)vertices_name_id_map.size()};
         vertices_name_id_map[v] = id;
         edge_lists.emplace_back();
@@ -43,9 +63,11 @@ namespace csg{
 
     /***
      * Add a direct edge
+     * Raise an error if the graph is compiled
      */
     template<typename K, typename U>
     void Graph<K, U>::add_di_edge(const K& source, const K& target) {
+        assert(!compiled);
         auto s_id {get_v_id(source)};
         auto t_id {get_v_id(target)};
 
@@ -54,9 +76,11 @@ namespace csg{
 
     /***
      * Add a bi-direct edge
+     * Raise an error if the graph is compiled
      */
     template<typename K, typename U>
     void Graph<K, U>::add_bdi_edge(const K& source, const K& target) {
+        assert(!compiled);
         auto s_id {get_v_id(source)};
         auto t_id {get_v_id(target)};
 
@@ -65,7 +89,7 @@ namespace csg{
     }
 
     template<typename K, typename U>
-    auto Graph<K, U>::get_neighbors_id(U v_id) -> const vector<U> & {
+    auto Graph<K, U>::get_neighbors_id(U v_id) const -> const vector<U> & {
         return edge_lists[v_id];
     }
 
