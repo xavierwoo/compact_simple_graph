@@ -27,8 +27,8 @@ namespace csg{
 
         auto a_id {graph.get_v_id("A")};
         auto b_id {graph.get_v_id("B")};
-        assert(graph.edge_lists[0][0] == 1);
-        assert(graph.edge_lists[1].empty());
+        assert(graph.edge_lists[a_id][0] == b_id);
+        assert(graph.edge_lists[b_id].empty());
 
         cout<<"add_di_edge() works"<<endl;
     }
@@ -39,10 +39,26 @@ namespace csg{
 
         auto a_id {graph.get_v_id("A")};
         auto b_id {graph.get_v_id("B")};
-        assert(graph.edge_lists[0][0] == 1);
-        assert(graph.edge_lists[1][0] == 0);
+        assert(graph.edge_lists[a_id][0] == b_id);
+        assert(graph.edge_lists[b_id][0] == a_id);
 
         cout<<"add_bdi_edge() works"<<endl;
+    }
+
+    void test_get_neighbors_id(){
+        Graph<string> graph;
+        graph.add_bdi_edge("A", "B");
+        graph.add_bdi_edge("A", "C");
+        graph.add_bdi_edge("A", "D");
+
+        uint32_t a_id {graph.get_v_id("A")};
+        uint32_t id {graph.get_v_id("B")};
+        for (auto u : graph.get_neighbors_id(a_id)){
+            assert(u == id);
+            id++;
+        }
+
+        cout<<"get_neighbors_id() works"<<endl;
     }
 
     [[maybe_unused]]
@@ -50,6 +66,7 @@ namespace csg{
         test_get_v_id();
         test_add_di_edge();
         test_add_bdi_edge();
+        test_get_neighbors_id();
     }
 }
 

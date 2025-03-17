@@ -20,6 +20,8 @@ namespace csg{
         auto get_v_id(const K&) -> U;
         void add_di_edge(const K&, const K&);
         void add_bdi_edge(const K&, const K&);
+
+        auto get_neighbors_id(U v_id) -> const vector<U>&;
     };
 
     /***
@@ -60,6 +62,11 @@ namespace csg{
 
         edge_lists[s_id].push_back(t_id);
         edge_lists[t_id].push_back(s_id);
+    }
+
+    template<typename K, typename U>
+    auto Graph<K, U>::get_neighbors_id(U v_id) -> const vector<U> & {
+        return edge_lists[v_id];
     }
 
     [[maybe_unused]]void it_works();
