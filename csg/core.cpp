@@ -75,7 +75,25 @@ namespace csg{
         auto d_id {graph.get_v_id("D")};
         assert(graph.get_neighbors_id(id)[0] == d_id);
 
-        cout<<"compile works"<<endl;
+        cout<<"compile works()"<<endl;
+    }
+
+    void test_has_edge_id(){
+        Graph<string> graph;
+        auto d_id {graph.get_v_id("D")};
+        graph.add_bdi_edge("A", "B");
+        graph.add_bdi_edge("A", "C");
+        graph.add_bdi_edge("A", "D");
+
+        auto a_id {graph.get_v_id("A")};
+        auto b_id {graph.get_v_id("B")};
+
+        assert(graph.has_edge_id(a_id, d_id));
+        assert(!graph.has_edge_id(b_id, d_id));
+
+        graph.compile();
+        assert(graph.has_edge_id(a_id, d_id));
+        assert(!graph.has_edge_id(b_id, d_id));
     }
 
     [[maybe_unused]]
@@ -85,6 +103,7 @@ namespace csg{
         test_add_bdi_edge();
         test_get_neighbors_id();
         test_compile();
+        test_has_edge_id();
     }
 }
 

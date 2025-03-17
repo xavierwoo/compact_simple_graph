@@ -15,6 +15,7 @@
 
 namespace csg{
     using std::vector, std::unordered_map, std::format;
+    using std::ranges::sort, std::ranges::find;
     template<typename K, typename U = uint32_t>
     struct Graph{
         unordered_map<K, U> vertices_name_id_map;
@@ -25,9 +26,24 @@ namespace csg{
         auto get_v_id(const K&) -> U;
         void add_di_edge(const K&, const K&);
         void add_bdi_edge(const K&, const K&);
-        auto get_neighbors_id(U v_id) const -> const vector<U>&;
+        auto get_neighbors_id(U ) const -> const vector<U>&;
+        auto has_edge_id(U , U ) const -> bool;
         void compile();
     };
+
+    template<typename K, typename U>
+    auto Graph<K, U>::has_edge_id(U s_id, U t_id) const -> bool {
+        [[unlikely]]
+        if(!compiled){
+            return find(edge_lists[s_id], t_id) != edge_lists[s_id].end();
+        }
+
+        for(auto u : edge_lists[s_id]){
+            if(u == t_id) return true;
+            else if(u > t_id) return false;
+        }
+        return false;
+    }
 
     /***
      * Make all edge lists memory fit and sorted
@@ -38,7 +54,7 @@ namespace csg{
         compiled = true;
         for(auto& list : edge_lists){
             list.shrink_to_fit();
-            std::ranges::sort(list);
+            sort(list);
         }
     }
 
@@ -54,7 +70,7 @@ namespace csg{
             return id_iter->second;
         }
 
-        assert(! compiled && std::format("Vertex {} does not exist", v).c_str());
+        assert(! compiled && format("Vertex {} does not exist", v).c_str());
         U id {(U)vertices_name_id_map.size()};
         vertices_name_id_map[v] = id;
         edge_lists.emplace_back();
