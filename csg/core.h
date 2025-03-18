@@ -92,7 +92,10 @@ namespace csg{
         auto s_id {get_v_id(source)};
         auto t_id {get_v_id(target)};
 
-        edge_lists[s_id].push_back(t_id);
+        auto& list {edge_lists[s_id]};
+        if(find(list, t_id) != list.end()) return;
+
+        list.push_back(t_id);
     }
 
     /***
@@ -105,8 +108,11 @@ namespace csg{
         auto s_id {get_v_id(source)};
         auto t_id {get_v_id(target)};
 
-        edge_lists[s_id].push_back(t_id);
-        edge_lists[t_id].push_back(s_id);
+        auto& s_list {edge_lists[s_id]};
+        if(find(s_list, t_id) == s_list.end()) s_list.push_back(t_id);
+
+        auto& t_list {edge_lists[t_id]};
+        if(find(t_list, s_id) == t_list.end()) t_list.push_back(s_id);
     }
 
     template<typename K, typename U>
