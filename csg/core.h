@@ -45,7 +45,7 @@ namespace csg{
 
         for(auto u : edge_lists[s_id]){
             if(u == t_id) return true;
-            else if(u > t_id) return false;
+            if(u > t_id) return false;
         }
         return false;
     }
