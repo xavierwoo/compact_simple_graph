@@ -10,33 +10,39 @@ This is an auxiliary lib for my other projects
 #include <csg/core.h> //header file for Compact Simple Graph
 #include <cassert>
 #include <iostream>
+#include <string>
 
 int main(){
-    csg::Graph<string> graph;
-    
+    csg::Graph<std::string> graph;
+
     //Use add_di_edge() to add a directed edge between two vertices
     //Vertices added automatically when adding an edge
     graph.add_di_edge("A", "B");
-    
+
     //Use get_v_id to get the ID of a vertex
     auto a_id {graph.get_v_id("A")};
     auto b_id {graph.get_v_id("B")};
-    
+
     //If the vertex does not exist, get_v_id will add it
     auto c_id {graph.get_v_id("C")};
-    
+
     //Use has_edge_id to check if a directed edge exists
     assert(graph.has_edge_id(a_id, b_id));
-    
+
     //Use get_neighbors to obtain IDs of all adjacent vertices
     for (auto u : graph.get_neighbors_id(a_id)){
         std::cout<<u<<" ";
     }
-    
-    //add_bdi_edge adds two edges of both direction bewteen two vertices
+
+    //add_bdi_edge adds two edges of both direction between two vertices
     graph.add_bdi_edge("B", "C");
     assert(graph.has_edge_id(b_id, c_id));
     assert(graph.has_edge_id(c_id, b_id));
+
+    //Use compile() to make the adjacency list in an optimized layout
+    //You can no longer change the graph after compile() is called.
+    graph.compile();
+    assert(graph.has_edge_id(a_id, b_id)); //faster
     return 0;
 }
 ```
@@ -72,6 +78,7 @@ You can specify the second template parameter when declare the graph.
 For example:
 
 ```c++
+// If the number of vertices is smaller than 255
 csg::Graph<string, uint8_t> graph
 ```
 
