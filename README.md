@@ -4,6 +4,12 @@ This is an adjacency list implementation for simple direct graph.
 
 This is an auxiliary lib for my other projects
 
+## Version
+
+**Current version**: v0.1.0
+
+![Version](https://img.shields.io/badge/version-v0.1.0-blue)
+
 ## Usage
 
 ```c++
